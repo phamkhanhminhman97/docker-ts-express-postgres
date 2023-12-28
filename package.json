@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev ./src/server.ts --watch",
+    "start:dev": "NODE_ENV=dev ts-node-dev ./src/server.ts --watch",
+    "start:uat": "NODE_ENV=uat ts-node-dev ./src/server.ts --watch",
     "build": "rm -rf dist && tsc",
-    "start:uat": "npm run build && pm2 start ecosystem.config.js --only uat"
+    "pm2:dev": "npm run build && pm2 start ecosystem.config.js --only dev",
+    "pm2:uat": "npm run build && pm2 start ecosystem.config.js --only uat"
   },
   "keywords": [],
   "author": "pkmm97",

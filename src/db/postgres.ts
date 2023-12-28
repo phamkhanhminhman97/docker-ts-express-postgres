@@ -1,6 +1,7 @@
 import { Pool } from "pg";
 
-export const connection = new Pool({
+// Connection for Docker container
+export const connectionDocker = new Pool({
   user: "root",
   host: "express-postgres",
   database: "db",
@@ -8,11 +9,21 @@ export const connection = new Pool({
   port: 5432,
 });
 
-async function connectToPostgreSQL() {
+// Connection for local development
+export const connectionLocal = new Pool({
+  user: "root",
+  host: "localhost",
+  database: "db",
+  password: "root",
+  port: 5432,
+});
+
+async function connectToPostgreSQL(connectionType = "local") {
   try {
+    const connection = connectionType === "local" ? connectionLocal : connectionDocker;
     if (connection.totalCount === 0 || connection.idleCount === 0) {
       console.log("Connecting to PostgreSQL...");
-      await connectToPool();
+      await connectToPool(connection);
       console.log("Connected to PostgreSQL!");
     } else {
       console.log("Already connected to PostgreSQL.");
@@ -22,7 +33,7 @@ async function connectToPostgreSQL() {
   }
 }
 
-async function connectToPool() {
+async function connectToPool(connection: Pool) {
   try {
     await connection.connect();
   } catch (error) {

@@ -1,6 +1,9 @@
 import express from "express";
 import axios from "axios";
-import { connectToPostgreSQL, connection } from "./db/postgres";
+import { connectToPostgreSQL } from "./db/postgres";
+import dotenv from 'dotenv';
+
+dotenv.config({ path: `.env.${process.env.NODE_ENV || "dev"}` });
 
 const app = express();
 const port = process.env.PORT || 9000;
@@ -8,14 +11,15 @@ const port = process.env.PORT || 9000;
 connectToPostgreSQL()
 
 app.get("/", async (req, res) => {
+  console.log(process.env.ENVIROMENT);
+  
   try {
     const response = await axios.get(
       "https://jsonplaceholder.typicode.com/todos/3"
     );
     const todo = response.data;
     res.json({ message: "Hello, TypeScript and Axios!", todo });
-    const todos = await connection.query("SELECT * FROM name");
-    console.log(todos.rows);
+    
     
   } catch (error) {
     console.error("Error fetching data:");
