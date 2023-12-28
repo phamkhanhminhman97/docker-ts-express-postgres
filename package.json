@@ -1,0 +1,31 @@
+{
+  "name": "docker-ts-express-postgres",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node-dev ./src/server.ts --watch",
+    "build": "rm -rf dist && tsc",
+    "start:uat": "npm run build && pm2 start ecosystem.config.js --only uat"
+  },
+  "keywords": [],
+  "author": "pkmm97",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "pg": "^8.11.3",
+    "pm2": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/pg": "^8.10.9",
+    "nodemon": "^3.0.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}
