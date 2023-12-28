@@ -7,9 +7,11 @@ module.exports = {
       name: "uat",
       script: "dist/server.js",
       instances: 1,
+      watch: true,
       exec_mode: "cluster",
       env: {
-        PORT: process.env.PORT || 9000,
+        NODE_ENV: "uat",
+        PORT: process.env.PORT,
       },
       log_date_format: "YYYY-MM-DD HH:mm Z",
       error_file: "logs/error.log",

@@ -1,29 +1,23 @@
 import { Pool } from "pg";
+import dotenv from "dotenv";
+
+dotenv.config({ path: `.env.${process.env.NODE_ENV || "dev"}` });
 
 // Connection for Docker container
-export const connectionDocker = new Pool({
-  user: "root",
-  host: "express-postgres",
-  database: "db",
-  password: "root",
-  port: 5432,
+export const connection = new Pool({
+  user: process.env.POSTGRES_USER || "root",
+  host: process.env.POSTGRES_HOST || "express-postgres123",
+  database: process.env.POSTGRES_DB || "db",
+  password: process.env.POSTGRES_PASSWORD || "root",
+  port: process.env.POSTGRES_PORT || 5432 as any,
 });
 
-// Connection for local development
-export const connectionLocal = new Pool({
-  user: "root",
-  host: "localhost",
-  database: "db",
-  password: "root",
-  port: 5432,
-});
 
-async function connectToPostgreSQL(connectionType = "local") {
+async function connectToPostgreSQL() {
   try {
-    const connection = connectionType === "local" ? connectionLocal : connectionDocker;
     if (connection.totalCount === 0 || connection.idleCount === 0) {
       console.log("Connecting to PostgreSQL...");
-      await connectToPool(connection);
+      await connectToPool();
       console.log("Connected to PostgreSQL!");
     } else {
       console.log("Already connected to PostgreSQL.");
@@ -33,7 +27,7 @@ async function connectToPostgreSQL(connectionType = "local") {
   }
 }
 
-async function connectToPool(connection: Pool) {
+async function connectToPool() {
   try {
     await connection.connect();
   } catch (error) {
